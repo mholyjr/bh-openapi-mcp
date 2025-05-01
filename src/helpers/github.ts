@@ -1,12 +1,6 @@
 import https from "https";
 
-/**
- * Fetches a file from the behavio/behavio-api-docs private GitHub repo using the GitHub API.
- * @param project The project name (e.g. "trendaro-admin-v2")
- * @param schemaName The schema file name (without .yaml extension)
- * @returns The YAML file content as a string, or null if not found or unauthorized
- */
-async function fetchSchemaFromGithub(
+export async function fetchSchemaFromGithub(
   project: string,
   schemaName: string
 ): Promise<string | null> {
@@ -34,11 +28,6 @@ async function fetchSchemaFromGithub(
   });
 }
 
-/**
- * Lists all schema names (without .yaml extension) in a given project folder in behavio-api-docs on GitHub.
- * @param project The project name (e.g. "trendaro-admin-v2")
- * @returns Array of schema names (without .yaml extension)
- */
 export async function listSchemasInProject(project: string): Promise<string[]> {
   const token = process.env.GITHUB_TOKEN;
   if (!token) return [];
@@ -74,10 +63,6 @@ export async function listSchemasInProject(project: string): Promise<string[]> {
   });
 }
 
-/**
- * Lists all project names (folder names) in behavio-api-docs on GitHub.
- * @returns Array of project names (folder names)
- */
 export async function listProjects(): Promise<string[]> {
   const token = process.env.GITHUB_TOKEN;
   if (!token) return [];
@@ -111,12 +96,4 @@ export async function listProjects(): Promise<string[]> {
       })
       .on("error", () => resolve([]));
   });
-}
-
-export async function findSchemaYaml(
-  schemaName: string,
-  _baseDir = undefined,
-  project = "trendaro-admin-v2"
-): Promise<string | null> {
-  return await fetchSchemaFromGithub(project, schemaName);
 }

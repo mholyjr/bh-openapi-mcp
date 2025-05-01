@@ -9,14 +9,13 @@ This project provides a Model Context Protocol (MCP) server for OpenAPI-based sc
 ## Features
 
 - MCP server implementation using `@modelcontextprotocol/sdk`
-- Tool for retrieving YAML schema definitions by name
+- Tool for retrieving YAML schema definitions by name and project from a private GitHub repository
 - TypeScript-based codebase
-- Example integration with OpenAPI schemas (see `schemas/` directory)
+- Fetching schemas directly from `@behavio/behavio-api-docs` repository to keep the data up-to-date
 
 ## Project Structure
 
 - `src/` - Source code for the MCP server and helpers
-- `schemas/` - OpenAPI YAML schema files
 - `build/` - Compiled output
 - `package.json` - Project configuration and dependencies
 
@@ -43,7 +42,6 @@ This project provides a Model Context Protocol (MCP) server for OpenAPI-based sc
 
 - Node.js (v16+ recommended)
 - pnpm or npm
-- schemas in `schemas` folder
 
 ### Install dependencies
 

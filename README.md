@@ -1,6 +1,6 @@
 # bh-openapi-mcp
 
-Model-Driven Control Plane for OpenAPI
+MCP server to get openapi schemas
 
 ## Overview
 
@@ -26,6 +26,7 @@ This project provides a Model Context Protocol (MCP) server for OpenAPI-based sc
 
 - Node.js (v16+ recommended)
 - pnpm or npm
+- schemas in `schemas` folder
 
 ### Install dependencies
 

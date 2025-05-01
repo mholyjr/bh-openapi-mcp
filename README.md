@@ -22,6 +22,23 @@ This project provides a Model Context Protocol (MCP) server for OpenAPI-based sc
 
 ## Getting Started
 
+### VS Code Settings
+
+```json
+"mcp": {
+    "servers": {
+        "bh-openapi-mcp": {
+            "type": "stdio",
+            "command": "npx",
+            "args": ["tsx", "[ABSOLUTE_PATH]/src/index.ts"],
+            "env": {
+                "GITHUB_TOKEN": "YOUR_GH_TOKEN"
+            }
+        }
+    }
+},
+```
+
 ### Prerequisites
 
 - Node.js (v16+ recommended)

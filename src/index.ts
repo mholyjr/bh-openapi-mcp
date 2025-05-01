@@ -1,7 +1,11 @@
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
 import { z } from "zod";
-import { findSchemaYaml, listSchemasInProject } from "./helpers/index.js";
+import {
+  findSchemaYaml,
+  listSchemasInProject,
+  listProjects,
+} from "./helpers/index.js";
 
 const server = new McpServer({
   name: "bh-openapi",
@@ -65,6 +69,35 @@ server.tool(
         {
           type: "text",
           text: `YAML for schema \"${schema}\" in project \"${project}\":\n\n${yamlContent}`,
+        },
+      ],
+    };
+  }
+);
+
+server.tool(
+  "list-projects",
+  "List all available projects (folders) in behavio-api-docs",
+  {},
+  async () => {
+    const projects = await listProjects();
+    if (!projects || projects.length === 0) {
+      return {
+        content: [
+          {
+            type: "text",
+            text: `No projects found in behavio-api-docs or could not be fetched from GitHub.`,
+          },
+        ],
+      };
+    }
+    return {
+      content: [
+        {
+          type: "text",
+          text: `Available projects in behavio-api-docs:\n- ${projects.join(
+            "\n- "
+          )}`,
         },
       ],
     };

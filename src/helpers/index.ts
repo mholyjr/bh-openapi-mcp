@@ -1,10 +1,4 @@
-import * as fs from "fs";
-import * as path from "path";
-import { dirname } from "node:path";
-import { fileURLToPath } from "node:url";
 import https from "https";
-
-const __dirname = dirname(fileURLToPath(import.meta.url));
 
 /**
  * Fetches a file from the behavio/behavio-api-docs private GitHub repo using the GitHub API.
@@ -23,7 +17,7 @@ async function fetchSchemaFromGithub(
     hostname: "api.github.com",
     path: `/repos/behavio/behavio-api-docs/contents/${path}`,
     headers: {
-      "User-Agent": "openapi-mcp",
+      "User-Agent": "bh-openapi-mcp",
       Authorization: `token ${token}`,
       Accept: "application/vnd.github.v3.raw",
     },
@@ -53,7 +47,7 @@ export async function listSchemasInProject(project: string): Promise<string[]> {
     hostname: "api.github.com",
     path: `/repos/behavio/behavio-api-docs/contents/${path}`,
     headers: {
-      "User-Agent": "openapi-mcp",
+      "User-Agent": "bh-openapi-mcp",
       Authorization: `token ${token}`,
       Accept: "application/vnd.github.v3+json",
     },
@@ -71,6 +65,45 @@ export async function listSchemasInProject(project: string): Promise<string[]> {
               .filter((f: any) => f.type === "file" && f.name.endsWith(".yaml"))
               .map((f: any) => f.name.replace(/\.yaml$/, ""));
             resolve(schemas);
+          } catch {
+            resolve([]);
+          }
+        });
+      })
+      .on("error", () => resolve([]));
+  });
+}
+
+/**
+ * Lists all project names (folder names) in behavio-api-docs on GitHub.
+ * @returns Array of project names (folder names)
+ */
+export async function listProjects(): Promise<string[]> {
+  const token = process.env.GITHUB_TOKEN;
+  if (!token) return [];
+  const path = `projects`;
+  const options = {
+    hostname: "api.github.com",
+    path: `/repos/behavio/behavio-api-docs/contents/${path}`,
+    headers: {
+      "User-Agent": "openapi-mcp",
+      Authorization: `token ${token}`,
+      Accept: "application/vnd.github.v3+json",
+    },
+  };
+  return new Promise((resolve) => {
+    https
+      .get(options, (res) => {
+        if (res.statusCode !== 200) return resolve([]);
+        let data = "";
+        res.on("data", (chunk) => (data += chunk));
+        res.on("end", () => {
+          try {
+            const files = JSON.parse(data);
+            const projects = files
+              .filter((f: any) => f.type === "dir")
+              .map((f: any) => f.name);
+            resolve(projects);
           } catch {
             resolve([]);
           }
